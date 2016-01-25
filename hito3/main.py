@@ -4,9 +4,9 @@
 """
 
 import Ice
-Ice.loadSlice('my_interface.ice')
-import my_interface
-import sys, time, random
+Ice.loadSlice('my_interface.ice --all -I .')
+import drobots
+import sys, time, random, socket
 from auxiliary_functions import *
 
 class Client(Ice.Application): 
@@ -55,9 +55,22 @@ class PlayerI(drobots.Player):
         self.broker = broker
         self.adapter = adapter    
         self.rc_counter = 0    
-        self.factory = ControllerFactory(self.broker, self.adapter)
+        self.factory = self.createControllerFactory()
         self.container = Container()
 
+    def createControllerFactory():
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("google.com", 80))
+        my_ip = s.getsockname()[0]
+
+        factory_proxy = self.broker.stringToProxy('factory1 -t -e 1.1:tcp -h '+my_ip+' -p 9090 -t 60000')
+        factory = drobots.ControllerFactoryPrx.checkedCast(factory_proxy)
+
+        if not factory:
+            raise RuntimeError('Invalid factory proxy')
+        
+        return factory
+    
     def makeController(self, robot, adapter, current=None): 
         print 'Haciendo robot controller...'
         name = 'rc' + str(self.rc_counter)
@@ -95,24 +108,11 @@ class Container:
     def getProxie(self, key,current=None):
         return self.proxies[key]
 
-class ControllerFactoryI(drobots.ControllerFactory):
-    def __init__(self,broker, adapter):
-        self.broker=broker
-        self.adapter=adapter
-
-    def make(self, bot, name, current=None):
-        if bot.ice_isA("::drobots::Attacker"):
-            rc_servant = RobotControllerAttacker(bot)
-        else:
-            rc_servant = RobotControllerDefender(bot)
- 
-        rc_proxy = self.adapter.add(rc_servant, self.broker.stringToIdentity(name))
-        return rc_proxy
 
 class RobotControllerI(drobots.RobotController):
     pass
 
-class RobotControllerAttacker(RobotControllerI): 
+class RobotControllerAttacker(drobots.RobotControllerAttacker): 
 
     def __init__(self, robot):
         self.robot = robot
@@ -172,7 +172,7 @@ class RobotControllerAttacker(RobotControllerI):
         print 'No te lo vas a creer... pero nos han destruido uno de los atacantes'
 
 
-class RobotControllerDefender(RobotControllerI):
+class RobotControllerDefender(drobots.RobotControllerDefender):
 
     def __init__(self, robot):
         self.robot = robot
