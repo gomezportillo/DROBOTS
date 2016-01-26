@@ -97,6 +97,6 @@ class PlayerI(drobots.Player):
         print red_nd_bold + "Pues... hemos perdido, loco" + end_format
         self.adapter.getCommunicator().shutdown()
 
-sys.exit(Client().main(sys.argv))
 
+sys.exit(Client().main(sys.argv))
 

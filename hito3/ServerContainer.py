@@ -12,16 +12,10 @@ class ContainerI(drobots.Container):
         self.proxies = dict()
 
     def link(self, key, proxy, current=None):
-        if key in self.proxies:
-            raise Services.AlreadyExists(key)
-
         print("link: {0} -> {1}".format(key, proxy))
         self.proxies[key] = proxy
 
     def unlink(self, key, current=None):
-        if not key in self.proxies:
-            raise Services.NoSuchKey(key)
-
         print("unlink: {0}".format(key))
         del self.proxies[key]
         

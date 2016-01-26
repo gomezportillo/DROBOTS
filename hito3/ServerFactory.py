@@ -8,7 +8,7 @@ from RobotControllers import *
 
 class ControllerFactoryI(drobots.ControllerFactory):
     def __init__(self):
-        self.name = 0
+        self.key = 0
 
     def make(self, robot, container, current=None):
         print "Factoria llamada"        
@@ -16,16 +16,16 @@ class ControllerFactoryI(drobots.ControllerFactory):
         if robot.ice_isA("::drobots::Attacker"):
             rc_servant = RobotControllerAttackerI(robot, container)
             rc_proxy = current.adapter.addWithUUID(rc_servant)
-            container.link(str(self.name), rc_proxy)
+            container.link(self.key, rc_proxy)
             rc = drobots.RobotControllerAttackerPrx.uncheckedCast(rc_proxy)
 
         else:
             rc_servant = RobotControllerDefenderI(robot, container)
             rc_proxy = current.adapter.addWithUUID(rc_servant)
-            container.link(str(self.name), rc_proxy)
+            container.link(self.key, rc_proxy)
             rc = drobots.RobotControllerDefenderPrx.uncheckedCast(rc_proxy)
 
-        self.name += 1
+        self.key += 1
         return rc
 
 class ServerFactory(Ice.Application):

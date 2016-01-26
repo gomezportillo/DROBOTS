@@ -6,8 +6,8 @@ module drobots {
     dictionary<string, Object*> ObjectPrxDict;
     
     interface Container {
-        void link(string key, Object* proxy);
-        void unlink(string key);
+        void link(int key, Object* proxy);
+        void unlink(int key);
         ObjectPrxDict list();
     };   
 

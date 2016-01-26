@@ -5,9 +5,9 @@
 
 SERVER = drobots3
 
-all: run
+all: main
 
-run:
+main:
 	python main.py --Ice.Config=Locator.config $(SERVER)
 
 dumb:
@@ -19,10 +19,9 @@ factory:
 container:
 	python ServerContainer.py --Ice.Config=ServerContainer.config
 
-
 clean:
 	rm *.pyc *~
 
-everything:
-	gnome-terminal -e make factory --tab -e make container --tab -e make dumb --tab -e make run
+#everything:
+#	gnome-terminal -e make factory --tab -e make container --tab -e make dumb --tab -e make run
 
