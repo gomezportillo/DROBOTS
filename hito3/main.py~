@@ -97,6 +97,27 @@ class PlayerI(drobots.Player):
         print red_nd_bold + "Pues... hemos perdido, loco" + end_format
         self.adapter.getCommunicator().shutdown()
 
+class Container:
+    def __init__(self):
+        self.proxies = dict()
+
+    def link(self, key, proxy, current=None):
+        try:
+            self.proxies[key] = proxy
+        except KeyError:
+            print "Key "+key+" was not found"
+
+    def unlink(self, key, current=None):
+        try:
+            del self.proxies[key]
+        except KeyError:
+            print "Key "+key+" was not found"
+
+    def getProxie(self, key,current=None):
+        return self.proxies[key]
+
+
+
 sys.exit(Client().main(sys.argv))
 
 

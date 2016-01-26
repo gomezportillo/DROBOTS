@@ -3,7 +3,7 @@
 
 .PHONY: all run dumb factory clean
 
-SERVER = drobots3
+SERVER = drobots2
 
 all: run
 
