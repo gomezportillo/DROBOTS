@@ -12,8 +12,9 @@ class RobotControllerI(drobots.RobotController):
 
 class RobotControllerAttackerI(drobots.RobotControllerAttacker): 
 
-    def __init__(self, robot):
+    def __init__(self, robot, container):
         self.robot = robot
+        self.container = container
         self.state = State.MOVING
         self.previous_damage = 0
         self.move_to = Point(10, 10)
@@ -72,8 +73,9 @@ class RobotControllerAttackerI(drobots.RobotControllerAttacker):
 
 class RobotControllerDefenderI(drobots.RobotControllerDefender):
 
-    def __init__(self, robot):
+    def __init__(self, robot, container):
         self.robot = robot
+        self.container = container
         self.state = State.MOVING
         self.previous_damage = 0
         self.move_to = Point(990, 990)

@@ -86,7 +86,7 @@ class PlayerI(drobots.Player):
 
     def makeController(self, robot, current=None): 
         print 'Haciendo robot controller...'
-        rc = self.factory.make(robot, self.container)
+        rc = self.factory.make(robot)
         return rc
 
     def win(self, current=None): 

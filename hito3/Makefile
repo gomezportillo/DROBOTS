@@ -3,7 +3,7 @@
 
 .PHONY: all run dumb factory clean
 
-SERVER = drobots3
+SERVER = drobots6
 
 all: run
 
@@ -16,5 +16,13 @@ dumb:
 factory:
 	python ServerFactory.py --Ice.Config=ServerFactory.config
 
+container:
+	python ServerContainer.py --Ice.Config=ServerContainer.config
+
+
 clean:
 	rm *.pyc *~
+
+everything:
+	gnome-terminal -e make factory --tab -e make container --tab -e make dumb --tab -e make run
+

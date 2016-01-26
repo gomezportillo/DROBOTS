@@ -7,31 +7,34 @@ import drobots, sys
 from RobotControllers import *
 
 class ControllerFactoryI(drobots.ControllerFactory):
-    def __init__(self, broker, adapter):
-        self.broker=broker
-        self.adapter=adapter
+    def __init__(self):
+        self.name = 0
 
-    def make(self, bot, current=None):
-        print "Factoria llamada"
-        if bot.ice_isA("::drobots::Attacker"):
-            rc_servant = RobotControllerAttackerI(bot)
-            rc_proxy = self.adapter.addWithUUID(rc_servant)
-            return rc_proxy 
+    def make(self, robot, container, current=None):
+        print "Factoria llamada"        
+
+        if robot.ice_isA("::drobots::Attacker"):
+            rc_servant = RobotControllerAttackerI(robot, container)
+            rc_proxy = current.adapter.addWithUUID(rc_servant)
+            container.link(rc_proxy, self.name)
+            rc = drobots.RobotControllerAttackerPrx.uncheckedCast(rc_proxy)
 
         else:
-            rc_servant = RobotControllerDefenderI(bot)
-            rc_proxy = self.adapter.addWithUUID(rc_servant)
-            return rc_proxy   
+            rc_servant = RobotControllerDefenderI(robot, container)
+            rc_proxy = current.adapter.addWithUUID(rc_servant)
+            container.link(rc_proxy, self.name)
+            rc = drobots.RobotControllerDefenderPrx.uncheckedCast(rc_proxy)
 
+        self.name += 1
+        return rc
 
 class ServerFactory(Ice.Application):
     def run(self, argv):
         broker = self.communicator()
         adapter = broker.createObjectAdapter("FactoryAdapter")
-
-        servant = ControllerFactoryI(broker, adapter)
+        servant = ControllerFactoryI()
         proxy = adapter.add(servant, broker.stringToIdentity("factory1"))
-
+        
         print(proxy)
 
         adapter.activate()
