@@ -10,7 +10,7 @@ module drobots {
     interface Container { };    
 
     interface RobotControllerAttacker extends drobots::RobotController{ };
-	interface RobotControllerDeffender extends drobots::RobotController{ };
+	interface RobotControllerDefender extends drobots::RobotController{ };
 
     
 };
