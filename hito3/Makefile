@@ -3,7 +3,7 @@
 
 .PHONY: all main dumb-player container clean all-factories everything
 
-SERVER = drobots8
+SERVER = drobots7
 
 all: everything
 

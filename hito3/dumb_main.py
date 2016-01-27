@@ -101,7 +101,7 @@ class RobotControllerAttacker(RobotControllerI):
         self.handlers = {
             State.MOVING : self.move,
             State.SHOOTING : self.shoot,
-            State.PASSING : self.passing
+            State.PLAYING : self.playing
         }
         
     
@@ -111,7 +111,7 @@ class RobotControllerAttacker(RobotControllerI):
         except drobots.NoEnoughEnergy:
             pass
 
-    def passing(self):
+    def playing(self):
         location = self.robot.location()
         print 'Soy Attacker y estoy en ' + str(location.x) + ', ' + str(location.y)
 
@@ -122,7 +122,7 @@ class RobotControllerAttacker(RobotControllerI):
         angle = int(round(calculate_angle(delta_x, delta_y), 0))
         print 'Moving to x: ' + str(location.x) + ' y: ' + str(location.y) + ' α: ' + str(angle) + 'º'
         self.robot.drive(angle, 100)
-        self.state = State.PASSING
+        self.state = State.PLAYING
 
     def shoot(self): 
         MAX_SHOOTS = 30
@@ -162,7 +162,7 @@ class RobotControllerDefender(RobotControllerI):
         self.handlers = {
             State.MOVING : self.move,
             State.SCANNING : self.scan,
-            State.PASSING : self.passing
+            State.PLAYING : self.playing
         }
 
     def turn(self, current=None):
@@ -171,7 +171,7 @@ class RobotControllerDefender(RobotControllerI):
         except drobots.NoEnoughEnergy:
             pass
 
-    def passing(self):
+    def playing(self):
         location = self.robot.location()
         print 'Soy Defender y estoy en '+ str(location.x) + ', ' + str(location.y)
 
@@ -182,7 +182,7 @@ class RobotControllerDefender(RobotControllerI):
         angle = int(round(calculate_angle(delta_x, delta_y), 0))
         print 'Moving to x: ' + str(location.x) + ' y: ' + str(location.y) + ' α: ' + str(angle) + 'º'
         self.robot.drive(angle, 100)
-        self.state = State.PASSING
+        self.state = State.PLAYING
 
 
     def scan(self): 

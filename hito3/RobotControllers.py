@@ -19,35 +19,35 @@ class RobotControllerAttackerI(drobots.RobotControllerAttacker):
         self.move_to = Point(10, 10)
         self.shoot_angle = 0
         self.shoots_counter = 0
+        self.friends_position = dict()
 
         self.handlers = {
             State.MOVING : self.move,
             State.SHOOTING : self.shoot,
-            State.PASSING : self.passing
+            State.PLAYING : self.playing
         }
         
-    def informEnemyPosition(self, point, current=None):
-        pass
-
     def setContainer(self, c, current=None):
         self.container = c
     
-    def enviarMensaje(self, msg, current=None):
-        print msg
-        coord = msg.split('(')
-        my_msg = "Attacker> Hola don Defender, ahora ya se que tus coordenadas son ("+coord[1]
-        return my_msg    
+    def informFriendPosition(self, point, his_id, current=None):
+        self.friends_position[his_id]= point
+        print "El Defender "+str(his_id)+" esta en "+str(point.x)+' '+str(point.y)
 
     def turn(self, current=None):
-        pass
-#        try:
-#            self.handlers[self.state]()
-#        except drobots.NoEnoughEnergy:
-#            pass
+        try:
+            self.handlers[self.state]()
+        except drobots.NoEnoughEnergy:
+            pass
 
-    def passing(self):
-        location = self.robot.location()
-        print "Soy Attacker y estoy en "+ str(location.x) + ", " + str(location.y)
+    def playing(self):
+        my_location = self.robot.location()    
+
+        for i in range(0,3):
+            defender_prx = self.container.getElementAt(i)
+            defender = drobots.RobotControllerAttackerPrx.uncheckedCast(defender_prx)
+            defender.informFriendPosition(my_location, i)
+
 
     def move(self):
         location = self.robot.location()
@@ -56,7 +56,7 @@ class RobotControllerAttackerI(drobots.RobotControllerAttacker):
         angle = int(round(calculate_angle(delta_x, delta_y), 0))
         print 'Moving to x: ' + str(location.x) + ' y: ' + str(location.y) + ' α: ' + str(angle) + 'º'
         self.robot.drive(angle, 100)
-        self.state = State.PASSING
+        self.state = State.PLAYING
 
     def shoot(self): 
         MAX_SHOOTS = 30
@@ -81,6 +81,7 @@ class RobotControllerDefenderI(drobots.RobotControllerDefender):
         self.container = container
         self.state = State.MOVING
         self.previous_damage = 0
+        self.friends_position = dict()
         self.move_to = Point(990, 990)
         self.all_angles = [0, 20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300, 320, 340]
         self.angles_left_to_scan = self.all_angles[:]
@@ -89,35 +90,33 @@ class RobotControllerDefenderI(drobots.RobotControllerDefender):
         self.handlers = {
             State.MOVING : self.move,
             State.SCANNING : self.scan,
-            State.PASSING : self.passing
+            State.PLAYING : self.playing
         }
 
     def setContainer(self, c, current=None):
         self.container = c
 
     def turn(self, current=None):
-
         try:
             self.handlers[self.state]()
         except drobots.NoEnoughEnergy:
             pass
 
-    def passing(self):
+    def playing(self):
 #        location = self.robot.location()
 #        print "Soy Defender y estoy en "+ str(location.x) + ", " + str(location.y)
 #        print self.container
-        for i in range(0,4):
-            print self.container.getElementAt(i)
-        
-        attacker_prx = self.container.getElementAt(2)
+        my_location = self.robot.location()    
 
-        location = self.robot.location()
-        coord = '(' + str(location.x) + ', ' + str(location.y) + ')'
-        attacker = drobots.RobotControllerAttackerPrx.checkedCast(attacker_prx)
-        my_msg = "Defender> Hola don Attacker, esta son mis coordenadas "+ coord
-        respuesta = attacker.enviarMensaje(my_msg)
-        print respuesta
+        for i in range(2,4):
+            attacker_prx = self.container.getElementAt(i)
+            attacker = drobots.RobotControllerAttackerPrx.uncheckedCast(attacker_prx)
+            attacker.informFriendPosition(my_location, i)
 
+
+    def informFriendPosition(self, point, his_id, current=None):
+        self.friends_position[his_id]= point
+        print "El Attacker "+str(his_id)+" esta en "+str(point.x)+' '+str(point.y)
 
     def move(self):
         location = self.robot.location()
@@ -126,7 +125,7 @@ class RobotControllerDefenderI(drobots.RobotControllerDefender):
         angle = int(round(calculate_angle(delta_x, delta_y), 0))
         print 'Moving to x: ' + str(location.x) + ' y: ' + str(location.y) + ' α: ' + str(angle) + 'º'
         self.robot.drive(angle, 100)
-        self.state = State.PASSING
+        self.state = State.PLAYING
 
 
     def scan(self): 
