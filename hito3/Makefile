@@ -1,7 +1,7 @@
 #!/usr/bin/make -f
 # -*- mode:makefile -*-
 
-.PHONY: all main dumb factory container clean
+.PHONY: all main dumb-player container clean all-factories everything
 
 SERVER = drobots8
 
@@ -11,7 +11,7 @@ main:
 	python main.py --Ice.Config=Locator.config $(SERVER)
 
 dumb-player:
-	python dumb_main.py --Ice.Config=Locator.config $(SERVER) > /dev/null
+	python dumb_main.py --Ice.Config=Locator.config $(SERVER)
 
 factory1:
 	python ServerFactory.py --Ice.Config=ServerFactory1.config
@@ -35,8 +35,9 @@ all-factories:
 	make -j factory1 factory2 factory3 factory4
 
 everything:
-	gnome-terminal -e "make all-factories"
-	gnome-terminal -e "make container"
-	make dumb-player&
-	gnome-terminal -e "make main"
+	gnome-terminal --tab -e "make all-factories"
+	gnome-terminal --tab -e "make container"
+	gnome-terminal --tab -e "make dumb-player"
+	#gnome-terminal --tab -e "make main"
+	make main
 

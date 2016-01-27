@@ -32,7 +32,7 @@ class Client(Ice.Application):
             try:
                 print 'Intentando hacer login...'
                 game.login(player, 'pdrm' + str(random.randint(0,99)))
-                print 'Estamos dentro. Esperando a que nos pidan el robot controller'
+                print 'Estamos dentro. Esperando a que nos pidan los robot controllers'
                 break
             except drobots.GameInProgress:
                 print red_nd_bold + "\nPartida en curso. Esperamos 10 segundos y lo intentamos otra vez" + end_format
@@ -57,7 +57,7 @@ class PlayerI(drobots.Player):
         self.counter = 0
         self.my_ip = self.get_my_IP()
         self.container_factories = self.create_container_of_factories() #filled up of factories!
-        self.container_robots = self.create_container_of_robots()
+        self.container_robots = self.create_container_of_controllers()
 
     def get_my_IP(self):
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -69,8 +69,8 @@ class PlayerI(drobots.Player):
         string_prx = 'container1 -t -e 1.1:tcp -h '+self.my_ip+' -p 9190 -t 60000'
         container_proxy = self.broker.stringToProxy(string_prx)
         factories_container = drobots.ContainerPrx.checkedCast(container_proxy)
-        factories_container.setType("ContainerF")
-
+        factories_container.setType("ContainerFactr")
+        print "######### CREATING FACTORIES ########"
         for i in range(0,4):
             string_prx = 'factory -t -e 1.1:tcp -h '+self.my_ip+' -p 909'+str(i)+' -t 60000'
             factory_proxy = self.broker.stringToProxy(string_prx)
@@ -84,10 +84,10 @@ class PlayerI(drobots.Player):
         
         return factories_container
 
-    def create_container_of_robots(self):
+    def create_container_of_controllers(self):
         container_proxy = self.broker.stringToProxy('container1 -t -e 1.1:tcp -h '+self.my_ip+' -p 9190 -t 60000')
         controller_container = drobots.ContainerPrx.checkedCast(container_proxy)
-        controller_container.setType("ContainerC")
+        controller_container.setType("ContainerContr")
 
         if not controller_container:
             raise RuntimeError('Invalid factory proxy')
@@ -96,6 +96,9 @@ class PlayerI(drobots.Player):
 
 
     def makeController(self, robot, current=None):
+        if self.counter == 0 :
+            print "######### CREATING CONTROLLERS ########"
+
         i = self.counter % 4
         self.counter += 1
         print 'Haciendo robot controller en factoría ' + str(i)

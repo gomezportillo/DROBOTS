@@ -32,11 +32,16 @@ class RobotControllerAttackerI(drobots.RobotControllerAttacker):
     def setContainer(self, c, current=None):
         self.container = c
     
+    def enviarMensaje(self, msg, current=None):
+        print msg
+        return "Attacker> Hola don José"    
+
     def turn(self, current=None):
-        try:
-            self.handlers[self.state]()
-        except drobots.NoEnoughEnergy:
-            pass
+        pass
+#        try:
+#            self.handlers[self.state]()
+#        except drobots.NoEnoughEnergy:
+#            pass
 
     def passing(self):
         location = self.robot.location()
@@ -63,14 +68,6 @@ class RobotControllerAttackerI(drobots.RobotControllerAttacker):
             self.shoots_counter = 0
             self.state = State.MOVING 
 
-    def checkPosition(self):      
-        location = self.robot.location()
-        delta_x = self.move_to.x - location.x
-        delta_y = self.move_to.y - location.y
-        if abs(delta_x) < 10 or abs(delta_y) < 10:   
-            self.move_to = Point(random.randint(0, 999), random.randint(0, 999))
-            self.state = State.MOVING
-    
     def robotDestroyed(self,current=None):
         print 'No te lo vas a creer... pero nos han destruido uno de los atacantes'
 
@@ -97,10 +94,20 @@ class RobotControllerDefenderI(drobots.RobotControllerDefender):
         self.container = c
 
     def turn(self, current=None):
-        try:
-            self.handlers[self.state]()
-        except drobots.NoEnoughEnergy:
-            pass
+#        print self.container
+#        for i in range(0,4):
+#            print self.container.getElementAt(i)
+        
+        attacker_prx = self.container.getElementAt(0)
+        attacker = drobots.RobotControllerAttackerPrx.checkedCast(attacker_prx)
+
+        respuesta = attacker.enviarMensaje("Defender> Hola don Attacker")
+        print respuesta
+
+##        try:
+##            self.handlers[self.state]()
+##        except drobots.NoEnoughEnergy:
+##            pass
 
     def passing(self):
         location = self.robot.location()
@@ -131,16 +138,7 @@ class RobotControllerDefenderI(drobots.RobotControllerDefender):
             self.shoot_angle = current_angle
             self.state = State.SHOOTING
         print 'Scanning to amplitude: ' + str(amplitude) + ' α: ' + str(current_angle) + 'º. Detected enemies: ' + str(detected_enemies)
-        self.checkPosition()
-
-    def checkPosition(self):      
-        location = self.robot.location()
-        delta_x = self.move_to.x - location.x
-        delta_y = self.move_to.y - location.y
-        if abs(delta_x) < 10 or abs(delta_y) < 10:   
-            self.move_to = Point(random.randint(0, 999), random.randint(0, 999))
-            self.state = State.MOVING
-    
+ 
     def robotDestroyed(self,current=None):
         print 'No te lo vas a creer... pero nos han destruido uno de los defensores'
 

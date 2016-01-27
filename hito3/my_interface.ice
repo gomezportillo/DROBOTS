@@ -11,6 +11,7 @@ module drobots {
         ObjectPrxDict list();
         Object* getElementAt(int key);
         void setType(string type);
+        string getType();
     };   
 
     interface ControllerFactory {
@@ -18,12 +19,14 @@ module drobots {
     };
 
     interface RobotControllerAttacker extends drobots::RobotController{
-        void informEnemyPosition(drobots::Point point);
         void setContainer(Container* container);
+        void informEnemyPosition(drobots::Point point);
+        string enviarMensaje(string msg);
     };
 
 	interface RobotControllerDefender extends drobots::RobotController{ 
         void setContainer(Container* container);
+        //void getInformedAboutEnemy(drobots::Point point, int angle);
     };
    
 };

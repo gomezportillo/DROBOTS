@@ -26,6 +26,9 @@ class ContainerI(drobots.Container):
 
     def setType(self, t, current=None):
         self.type = t
+
+    def getType(self, current=None):
+        return self.type
         
 class ServerContainer(Ice.Application):
     def run(self, argv):
