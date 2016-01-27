@@ -1,7 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-
 import Ice
 Ice.loadSlice('my_interface.ice --all -I .')
 import drobots

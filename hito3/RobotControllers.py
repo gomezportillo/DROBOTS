@@ -4,7 +4,7 @@
 import Ice
 Ice.loadSlice('my_interface.ice --all -I .')
 import drobots
-import random
+import random, sys
 from auxiliary_functions import *
 
 class RobotControllerI(drobots.RobotController):
@@ -12,9 +12,8 @@ class RobotControllerI(drobots.RobotController):
 
 class RobotControllerAttackerI(drobots.RobotControllerAttacker): 
 
-    def __init__(self, robot, container):
+    def __init__(self, robot):
         self.robot = robot
-        self.container = container
         self.state = State.MOVING
         self.previous_damage = 0
         self.move_to = Point(10, 10)
@@ -27,6 +26,11 @@ class RobotControllerAttackerI(drobots.RobotControllerAttacker):
             State.PASSING : self.passing
         }
         
+    def informEnemyPosition(self, point, current=None):
+        pass
+
+    def setContainer(self, c, current=None):
+        self.container = c
     
     def turn(self, current=None):
         try:
@@ -36,7 +40,7 @@ class RobotControllerAttackerI(drobots.RobotControllerAttacker):
 
     def passing(self):
         location = self.robot.location()
-        print 'Soy Attacker y estoy en ' + str(location.x) + ', ' + str(location.y)
+        print "Soy Attacker y estoy en "+ str(location.x) + ", " + str(location.y)
 
     def move(self):
         location = self.robot.location()
@@ -89,6 +93,9 @@ class RobotControllerDefenderI(drobots.RobotControllerDefender):
             State.PASSING : self.passing
         }
 
+    def setContainer(self, c, current=None):
+        self.container = c
+
     def turn(self, current=None):
         try:
             self.handlers[self.state]()
@@ -97,7 +104,7 @@ class RobotControllerDefenderI(drobots.RobotControllerDefender):
 
     def passing(self):
         location = self.robot.location()
-        print 'Soy Defender y estoy en '+ str(location.x) + ', ' + str(location.y)
+        print "Soy Defender y estoy en "+ str(location.x) + ", " + str(location.y)
 
     def move(self):
         location = self.robot.location()

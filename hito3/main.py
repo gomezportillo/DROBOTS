@@ -71,7 +71,7 @@ class PlayerI(drobots.Player):
         factories_container = drobots.ContainerPrx.checkedCast(container_proxy)
         factories_container.setType("ContainerF")
 
-        for i in range(0,3):
+        for i in range(0,4):
             string_prx = 'factory -t -e 1.1:tcp -h '+self.my_ip+' -p 909'+str(i)+' -t 60000'
             factory_proxy = self.broker.stringToProxy(string_prx)
             print factory_proxy
@@ -96,7 +96,7 @@ class PlayerI(drobots.Player):
 
 
     def makeController(self, robot, current=None):
-        i = self.counter % 3
+        i = self.counter % 4
         self.counter += 1
         print 'Haciendo robot controller en factoría ' + str(i)
         factory_proxy = self.container_factories.getElementAt(i)

@@ -18,10 +18,12 @@ module drobots {
     };
 
     interface RobotControllerAttacker extends drobots::RobotController{
-        void inform_enemy_position(drobots::Point);
+        void informEnemyPosition(drobots::Point point);
+        void setContainer(Container* container);
     };
 
 	interface RobotControllerDefender extends drobots::RobotController{ 
+        void setContainer(Container* container);
     };
    
 };

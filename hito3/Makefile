@@ -3,7 +3,7 @@
 
 .PHONY: all main dumb factory container clean
 
-SERVER = drobots5
+SERVER = drobots9
 
 all: main
 
@@ -21,6 +21,9 @@ factory2:
 
 factory3:
 	python ServerFactory.py --Ice.Config=ServerFactory3.config
+
+factory4:
+	python ServerFactory.py --Ice.Config=ServerFactory4.config
 
 container:
 	python ServerContainer.py --Ice.Config=ServerContainer.config
