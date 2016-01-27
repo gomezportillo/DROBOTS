@@ -8,17 +8,16 @@ from RobotControllers import *
 
 class ControllerFactoryI(drobots.ControllerFactory):
     def __init__(self):
-        self.key = 0
+        pass
 
-    def make(self, robot, container_robots, current=None):
+    def make(self, robot, container_robots, key, current=None):
         print "make de factoria llamadao"        
 
         if robot.ice_isA("::drobots::Attacker"):
             rc_servant = RobotControllerAttackerI(robot)
             rc_proxy = current.adapter.addWithUUID(rc_servant)
             print rc_proxy                  
-            container_robots.link(self.key, rc_proxy)
-            self.key += 1
+            container_robots.link(key, rc_proxy)
             rc = drobots.RobotControllerAttackerPrx.uncheckedCast(rc_proxy)
             rc.setContainer(container_robots)
 
@@ -26,8 +25,7 @@ class ControllerFactoryI(drobots.ControllerFactory):
             rc_servant = RobotControllerDefenderI(robot, container_robots)
             rc_proxy = current.adapter.addWithUUID(rc_servant)
             print rc_proxy                  
-            container_robots.link(self.key, rc_proxy)
-            self.key += 1
+            container_robots.link(key, rc_proxy)
             rc = drobots.RobotControllerDefenderPrx.uncheckedCast(rc_proxy)
             rc.setContainer(container_robots)
 

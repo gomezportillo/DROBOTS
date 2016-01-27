@@ -34,7 +34,9 @@ class RobotControllerAttackerI(drobots.RobotControllerAttacker):
     
     def enviarMensaje(self, msg, current=None):
         print msg
-        return "Attacker> Hola don José"    
+        coord = msg.split('(')
+        my_msg = "Attacker> Hola don Defender, ahora ya se que tus coordenadas son ("+coord[1]
+        return my_msg    
 
     def turn(self, current=None):
         pass
@@ -94,24 +96,28 @@ class RobotControllerDefenderI(drobots.RobotControllerDefender):
         self.container = c
 
     def turn(self, current=None):
-#        print self.container
-#        for i in range(0,4):
-#            print self.container.getElementAt(i)
-        
-        attacker_prx = self.container.getElementAt(0)
-        attacker = drobots.RobotControllerAttackerPrx.checkedCast(attacker_prx)
 
-        respuesta = attacker.enviarMensaje("Defender> Hola don Attacker")
-        print respuesta
-
-##        try:
-##            self.handlers[self.state]()
-##        except drobots.NoEnoughEnergy:
-##            pass
+        try:
+            self.handlers[self.state]()
+        except drobots.NoEnoughEnergy:
+            pass
 
     def passing(self):
+#        location = self.robot.location()
+#        print "Soy Defender y estoy en "+ str(location.x) + ", " + str(location.y)
+#        print self.container
+        for i in range(0,4):
+            print self.container.getElementAt(i)
+        
+        attacker_prx = self.container.getElementAt(2)
+
         location = self.robot.location()
-        print "Soy Defender y estoy en "+ str(location.x) + ", " + str(location.y)
+        coord = '(' + str(location.x) + ', ' + str(location.y) + ')'
+        attacker = drobots.RobotControllerAttackerPrx.checkedCast(attacker_prx)
+        my_msg = "Defender> Hola don Attacker, esta son mis coordenadas "+ coord
+        respuesta = attacker.enviarMensaje(my_msg)
+        print respuesta
+
 
     def move(self):
         location = self.robot.location()

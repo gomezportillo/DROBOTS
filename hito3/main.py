@@ -100,12 +100,12 @@ class PlayerI(drobots.Player):
             print "######### CREATING CONTROLLERS ########"
 
         i = self.counter % 4
-        self.counter += 1
         print 'Haciendo robot controller en factoría ' + str(i)
         factory_proxy = self.container_factories.getElementAt(i)
         print factory_proxy
         factory = drobots.ControllerFactoryPrx.checkedCast(factory_proxy)
-        rc = factory.make(robot, self.container_robots)
+        rc = factory.make(robot, self.container_robots, self.counter)
+        self.counter += 1
         return rc
 
     def win(self, current=None): 

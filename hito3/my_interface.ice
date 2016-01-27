@@ -15,18 +15,17 @@ module drobots {
     };   
 
     interface ControllerFactory {
-        drobots::RobotController* make(drobots::Robot* bot, Container* container);
+        drobots::RobotController* make(drobots::Robot* bot, Container* container, int key);
     };
 
     interface RobotControllerAttacker extends drobots::RobotController{
         void setContainer(Container* container);
-        void informEnemyPosition(drobots::Point point);
-        string enviarMensaje(string msg);
+        void informFriendPosition(drobots::Point point);
     };
 
 	interface RobotControllerDefender extends drobots::RobotController{ 
         void setContainer(Container* container);
-        //void getInformedAboutEnemy(drobots::Point point, int angle);
+        void informFriendPosition(drobots::Point point);
     };
    
 };

@@ -11,7 +11,7 @@ class State:
     MOVING = 0
     SCANNING = 1
     SHOOTING = 2
-    PASSING = 3
+    PLAYING = 3
 
 class Point:
     def __init__(self, x, y): 
