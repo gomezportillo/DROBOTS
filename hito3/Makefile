@@ -1,9 +1,9 @@
 #!/usr/bin/make -f
 # -*- mode:makefile -*-
 
-.PHONY: all run dumb factory clean
+.PHONY: all main dumb factory container clean
 
-SERVER = drobots3
+SERVER = drobots5
 
 all: main
 
@@ -13,8 +13,14 @@ main:
 dumb:
 	python dumb_main.py --Ice.Config=Locator.config $(SERVER)
 
-factory:
-	python ServerFactory.py --Ice.Config=ServerFactory.config
+factory1:
+	python ServerFactory.py --Ice.Config=ServerFactory1.config
+
+factory2:
+	python ServerFactory.py --Ice.Config=ServerFactory2.config
+
+factory3:
+	python ServerFactory.py --Ice.Config=ServerFactory3.config
 
 container:
 	python ServerContainer.py --Ice.Config=ServerContainer.config
