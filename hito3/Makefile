@@ -3,15 +3,15 @@
 
 .PHONY: all main dumb factory container clean
 
-SERVER = drobots9
+SERVER = drobots8
 
-all: main
+all: everything
 
 main:
 	python main.py --Ice.Config=Locator.config $(SERVER)
 
-dumb:
-	python dumb_main.py --Ice.Config=Locator.config $(SERVER)
+dumb-player:
+	python dumb_main.py --Ice.Config=Locator.config $(SERVER) > /dev/null
 
 factory1:
 	python ServerFactory.py --Ice.Config=ServerFactory1.config
@@ -31,6 +31,12 @@ container:
 clean:
 	rm *.pyc *~
 
-#everything:
-#	gnome-terminal -e make factory --tab -e make container --tab -e make dumb --tab -e make run
+all-factories:
+	make -j factory1 factory2 factory3 factory4
+
+everything:
+	gnome-terminal -e "make all-factories"
+	gnome-terminal -e "make container"
+	make dumb-player&
+	gnome-terminal -e "make main"
 
