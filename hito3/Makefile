@@ -38,6 +38,7 @@ everything:
 	gnome-terminal --tab -e "make all-factories"
 	gnome-terminal --tab -e "make container"
 	gnome-terminal --tab -e "make dumb-player"
-	#gnome-terminal --tab -e "make main"
-	make main
+#	make main
+	gnome-terminal --tab -e "make main
+
 
