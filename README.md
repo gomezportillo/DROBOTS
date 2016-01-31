@@ -6,7 +6,9 @@ Two first milesotnes and basic version of the last one. Further information abou
 * First milestone asked for connecting to the server and moving a single robot to the 500,500 position on the board
 * Second milestone was aimed to develop a winning strategy for a single robot. A FSM was designed an implemented for this duty.
 
-![Alt text](https://github.com/pedroma-gomezp/DROBOTS/blob/master/hito2/FSM%20diagram.png?raw=true)
+<p align="center">
+  <img src="https://github.com/pedroma-gomezp/DROBOTS/blob/master/hito2/FSM%20diagram.png?raw=true" alt="FSM"/>
+</p>
 
 * Third and last milestone asked for a implementation of several distributed factories and containers for creating robot controllers and holding those factories and robot controllers in order to allow every element of the system to access others, regardless the physical computer they are located. A Makefile has been set up for launching four different terminals,
 	* first one will set up the four factories of the system (each one can be launched independently)
